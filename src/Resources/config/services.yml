@@ -1,0 +1,7 @@
+services:
+    qbus_config_form.data_container.module:
+        class: Qbus\ConfigFormBundle\DataContainer\Module
+        public: true
+        arguments:
+            - "@contao.framework"
+            - "%kernel.project_dir%"
