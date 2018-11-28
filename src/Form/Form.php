@@ -14,7 +14,7 @@ namespace Qbus\ConfigFormBundle\Form;
 
 use Qbus\TransientForm\TransientFormModel;
 use Qbus\TransientForm\TransientFormFieldModel;
-use Contao\Controller;
+use Contao\Module;
 
 class Form
 {
@@ -22,6 +22,44 @@ class Form
 	protected $arrFormConfig;
 
 	protected $objForm;
+
+	protected $arrData;
+
+	/**
+	 * Set an object property
+	 *
+	 * @param string $strKey
+	 * @param mixed  $varValue
+	 */
+	public function __set($strKey, $varValue) {
+		$this->arrData[$strKey] = $varValue;
+	}
+
+	/**
+	 * Return an object property
+	 *
+	 * @param string $strKey
+	 *
+	 * @return mixed
+	 */
+	public function __get($strKey) {
+		if (isset($this->arrData[$strKey])) {
+			return $this->arrData[$strKey];
+		}
+
+		return parent::__get($strKey);
+	}
+
+	/**
+	 * Check whether a property is set
+	 *
+	 * @param string $strKey
+	 *
+	 * @return boolean
+	 */
+	public function __isset($strKey) {
+		return isset($this->arrData[$strKey]);
+	}
 
 	public function __construct($arrFormConfig) {
 		$this->arrFormConfig = $arrFormConfig;
@@ -33,7 +71,27 @@ class Form
 			return '';
 		}
 
-		$strForm = Controller::getForm($this->objForm);
+		$objForm = $this->objForm;
+
+		$elementClass = Module::findClass('form');
+
+		if (!class_exists($elementClass)) {
+			System::log('Form class "'.$elementClass.'" does not exist', __METHOD__, TL_ERROR);
+
+			return '';
+		}
+
+		$objForm->typePrefix = 'mod_';
+		$objForm->form = $objForm->id;
+
+		$objElement = new $elementClass($objForm, 'main');
+		$objElement->hl = $this->hl;
+		$objElement->headline = $this->headline;
+		if (empty($objForm->cssID)) {
+			$objElement->cssID = $this->cssID;
+		}
+
+		$strForm = $objElement->generate();
 
 		// TODO: What if something is inserting rows into the form database
 		//       tables during frontend rendering?
@@ -69,7 +127,7 @@ class Form
 			$objFormField = new TransientFormFieldModel;
 			$objFormField->setRow($arrFormField);
 			$objFormField->registerTransient();
-			// Currently not used, see "TODO: What if ..."
+			// Currently not usable this way, see "TODO: What if ..."
 			// $arrFormFields[] = $objFormField;
 			$arrFormFieldIds[] = $objFormField->id;
 		}

@@ -42,6 +42,9 @@ class ModuleConfigForm extends ContaoModule
 			$formConfig = include $configFile;
 		}
 		$configForm = new ConfigForm($formConfig);
+		foreach ($this->arrData as $key => $property) {
+			$configForm->$key = $property;
+		}
 		$this->Template->form = $configForm->generate();
 		$this->Template->objForm = $configForm->getFormInstance();
 	}
