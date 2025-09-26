@@ -17,7 +17,7 @@ class Module
 	private $framework;
 	private $projectDir;
 
-	public function __construct(ContaoFrameworkInterface $framework, string $projectDir) {
+	public function __construct(\Contao\CoreBundle\Framework\ContaoFramework $framework, string $projectDir) {
 		$this->framework = $framework;
 		$this->projectDir = $projectDir;
 	}
