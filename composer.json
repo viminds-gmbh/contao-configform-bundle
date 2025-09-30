@@ -1,5 +1,5 @@
 {
-    "name": "viminds-gmbh/contao-configform-bundle",
+    "name": "qbus/contao-configform-bundle",
     "description": "Define forms using config files instead of the form generator.",
     "type": "contao-bundle",
     "license": "LGPL-3.0+",
@@ -14,7 +14,7 @@
     "require": {
         "php": "^7.4 || ^8.1",
         "contao/core-bundle": "^5.3",
-        "viminds-gmbh/contao-transient-form": "^1.0.0"
+        "qbus/contao-transient-form": "^1.0.0"
     },
     "extra": {
         "contao-manager-plugin": "Qbus\\ConfigFormBundle\\ContaoManager\\Plugin"
