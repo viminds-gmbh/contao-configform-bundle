@@ -47,7 +47,6 @@ class Form
 			return $this->arrData[$strKey];
 		}
 
-		// Handle the case where there is no parent class
 		return null;
 	}
 
